@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "is-it-torch"
+version = "0.1.0"
+description = ""
+authors = ["svamsip <vmcvmc333@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.26.4"
+wheel = "^0.42.0"
+torch = [{version = "^2.1.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"}]
+torchaudio = [{version = "^2.1.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"}]
+torchvision = [{version = "^0.16.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"}]
+matplotlib = "^3.8.3"
+ipykernel = "^6.29.4"
+scipy = "1.11.4"
+pytest = "^8.3.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+isort = "^5.13.2"
+tensorboard = "^2.18.0"
+torch-tb-profiler = "^0.4.3"
+torchinfo = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
