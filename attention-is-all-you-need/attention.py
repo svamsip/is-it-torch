@@ -19,6 +19,8 @@ class ScaledDotProductAttention(nn.Module):
 
     def forward(self, Q, K, V, mask=None):
 
+        # Q/K/V: (batch_size, num_heads, seq_len, d_k)
+
         self.d_k = K.size(-1)
         # Scaled dot-product attention
         # coefficients for V (z): (Q.K^T)/sqrt(d_k)
@@ -49,7 +51,7 @@ class MultiHeadAttention(nn.Module):
     Multi-head attention mechanism
     params:
         d_model: int, dimension of model
-        # d_k: int, dimension of K/Q
+        # d_k: int, dimension of K, Q
         # d_v: int, dimension of V
         h: int, number of heads in multi-head attention
 
@@ -118,9 +120,7 @@ class MultiHeadAttention(nn.Module):
 
         # concatenate heads: (batch_size, h, seq_len, d_v) -> (batch_size, seq_len, h, d_v) -> (batch_size, seq_len, h * d_v)
         ## ! tensor.contiguous()
-        context = context.transpose(1, 2).reshape(
-            batch_size, seq_len, self.h * self.d_v
-        )
+        context = context.transpose(1, 2).reshape(batch_size, seq_len, self.h * self.d_v)
 
         # final linear layer: output (batch_size, seq_len, d_model)
         output = self.fc(context)

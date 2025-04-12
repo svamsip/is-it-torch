@@ -34,14 +34,11 @@ class PositionalEncoding(nn.Module):
         pos_idx = torch.arange(0, max_seq_len, dtype=torch.float).unsqueeze(1)
 
         # denominator: [2i] aka even positions
-        denominator = torch.exp(
-            torch.arange(0, d_model, 2, dtype=torch.float)
-            * (-math.log(10000.0) / d_model)
-        )
+        denominator = torch.exp(torch.arange(0, d_model, 2, dtype=torch.float) * (-math.log(10000.0) / d_model))
 
         # compute positional encoding
-        self.pos_enc[:, 0::2] = torch.sin(pos_idx / denominator)
-        self.pos_enc[:, 1::2] = torch.cos(pos_idx / denominator)
+        self.pos_enc[:, 0::2] = torch.sin(pos_idx * denominator)
+        self.pos_enc[:, 1::2] = torch.cos(pos_idx * denominator)
 
         # add batch dimension: (1, max_seq_len, d_model)
         self.pos_enc = self.pos_enc.unsqueeze(0)
@@ -56,13 +53,13 @@ def init_weights(m):
     """
     Initialize weights
     """
-    if type(m) == nn.Linear:
+    if isinstance(m, nn.Linear):
         nn.init.xavier_uniform_(m.weight)
         if m.bias is not None:
             nn.init.constant_(m.bias, 0)
-    elif type(m) == nn.Embedding:
+    elif isinstance(m, nn.Embedding):
         nn.init.xavier_uniform_(m.weight)
-    elif type(m) == nn.LayerNorm:
+    elif isinstance(m, nn.LayerNorm):
         nn.init.constant_(m.bias, 0)
         nn.init.constant_(m.weight, 1.0)
     return None
